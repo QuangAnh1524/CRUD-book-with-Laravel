@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Books;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class BooksController extends Controller
@@ -23,6 +24,8 @@ class BooksController extends Controller
 
     public function show($id) {
         $book = Books::find($id);
+        $category = Category::find($book->category_id);
+        $book->category = $category;
         return view('books.show', ['book' => $book]);
     }
 
@@ -31,12 +34,13 @@ class BooksController extends Controller
         $book->name = $request->input('name');
         $book->price = $request->input('price');
         $book->description = $request->input('description');
+        $book->category_id = $request->input('category_id');
         $book->save();
         return redirect('/books');
     }
 
     public function edit($id) {
-        $book = Books::find($id)->first();
+        $book = Books::find($id)    ;
         return view('books.edit')->with('book', $book);
     }
 

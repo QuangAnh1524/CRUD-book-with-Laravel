@@ -11,4 +11,8 @@ class Books extends Model
     protected $table = 'books';
     protected $primaryKey = 'id';
     protected $timestamp = true;
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
 }

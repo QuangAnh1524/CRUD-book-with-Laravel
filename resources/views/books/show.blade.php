@@ -11,6 +11,8 @@
                 <th>NAME</th>
                 <th>PRICE</th>
                 <th>DESCRIPTION</th>
+                <th>CATEGORY_ID</th>
+                <th>CATEGORY NAME</th>
                 <th>ACTION</th>
             </tr>
             </thead>
@@ -20,6 +22,8 @@
                     <td>{{ $book->name }}</td>
                     <td>{{ $book->price }}</td>
                     <td>{{ $book->description }}</td>
+                    <td>{{$book->category_id}}</td>
+                    <td>{{$book->category->name}}</td>
                     <td><a href="{{ url('books/'.$book->id) }}" class="btn btn-outline-success" style="font-weight: bold;">View</a></td>
                     <td><a href="{{ url('books/'.$book->id.'/edit') }}" class="btn btn-outline-warning" style="font-weight: bold;">Update</a></td>
                     <td><a href="{{ url('books/'.$book->id.'/confirm-delete') }}" class="btn btn-outline-danger">Delete</a></td>
