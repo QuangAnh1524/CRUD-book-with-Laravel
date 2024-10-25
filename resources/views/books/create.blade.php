@@ -17,7 +17,24 @@
         <label for="formGroupExampleInput2" class="form-label">Description</label>
         <input type="text" class="form-control" id="formGroupExampleInput2" name="description" placeholder="Description of book">
     </div>
+    <div>
+        <label>Choose a category: </label>
+        <select name="category_id">
+            @foreach($categories as $category)
+                <option value="{{$category->id}}">{{$category->name}}</option>
+            @endforeach
+        </select>
+    </div>
     <button type="submit" class="btn btn-primary">Submit</button>
         <a href="{{ url('/books') }}" class="btn btn-secondary">Back</a>
     </form>
+    @if($errors->any())
+        <div>
+            @foreach($errors->all() as $error)
+                <p class="text-danger">
+                    {{$error}}
+                </p>
+            @endforeach
+        </div>
+    @endif
 @endsection

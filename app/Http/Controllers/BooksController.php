@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateValidationRequest;
 use App\Models\Books;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -19,17 +20,21 @@ class BooksController extends Controller
     }
 
     public function create() {
-        return view('books.create');
+        $categories = Category::all();
+        return view('books.create', ['categories' => $categories]);
     }
 
     public function show($id) {
         $book = Books::find($id);
         $category = Category::find($book->category_id);
         $book->category = $category;
-        return view('books.show', ['book' => $book]);
+        $categories  = Category::all();
+        return view('books.show', ['book' => $book, 'categories' => $categories]);
     }
 
-    public function store(Request $request) {
+    public function store(CreateValidationRequest $request) {
+        $request->validated();
+
         $book = new Books();
         $book->name = $request->input('name');
         $book->price = $request->input('price');
@@ -44,7 +49,8 @@ class BooksController extends Controller
         return view('books.edit')->with('book', $book);
     }
 
-    public function update(Request $request, $id) {
+    public function update(CreateValidationRequest $request, $id) {
+        $request->validated();
         $book = Books::where('id', $id)->update([
             'name' => $request->input('name'),
             'price' => $request->input('price'),
