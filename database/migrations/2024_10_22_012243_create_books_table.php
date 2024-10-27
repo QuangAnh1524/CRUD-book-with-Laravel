@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        // Tạo bảng categories trước
+        // Tạo bảng categories
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');//category's id
             $table->string("name");
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Sau đó tạo bảng books
+        // Tạo bảng books
         Schema::create('books', function (Blueprint $table) {
             $table->increments('id');
             $table->string("name");

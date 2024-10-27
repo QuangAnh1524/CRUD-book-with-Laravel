@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateValidationRequest;
+use App\Http\Requests\UpdateValidationRequest;
 use App\Models\Books;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -40,6 +41,15 @@ class BooksController extends Controller
         $book->price = $request->input('price');
         $book->description = $request->input('description');
         $book->category_id = $request->input('category_id');
+
+        // Kiểm tra xem có file được upload không
+        if ($request->hasFile('image_path')) {
+            $file = $request->file('image_path');
+            $generatedImageName = 'image_'.time().'-'.$request->name.'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('images'), $generatedImageName);
+            $book->image_path = $generatedImageName;
+        }
+
         $book->save();
         return redirect('/books');
     }
@@ -49,13 +59,35 @@ class BooksController extends Controller
         return view('books.edit')->with('book', $book);
     }
 
-    public function update(CreateValidationRequest $request, $id) {
+    public function update(UpdateValidationRequest $request, $id) {
         $request->validated();
-        $book = Books::where('id', $id)->update([
+        $book = Books::findOrFail($id);
+        $updateData = [
             'name' => $request->input('name'),
             'price' => $request->input('price'),
             'description' => $request->input('description')
-        ]);
+        ];
+
+        if ($request->hasFile('image_path')) {
+            if ($book->image_path) {
+                $oldImagePath = public_path('images/' . $book->image_path);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+
+
+            $file = $request->file('image_path');
+            $generatedImageName = 'image_'.time().'-'.$request->name.'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('images'), $generatedImageName);
+
+
+            $updateData['image_path'] = $generatedImageName;
+        }
+
+        
+        Books::where('id', $id)->update($updateData);
+
         return redirect('/books');
     }
 
