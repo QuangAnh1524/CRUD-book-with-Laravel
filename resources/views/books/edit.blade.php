@@ -24,8 +24,6 @@
                    value="{{$book->description}}"
                    name="description" placeholder="Description of book">
         </div>
-
-        <!-- Thêm phần hiển thị ảnh hiện tại -->
         <div class="mb-3">
             <label class="form-label">Current Image</label>
             @if($book->image_path)
